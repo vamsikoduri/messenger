@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Message {
 
-	private int messageId;
+	private Long messageId;
 	private String mesg;
 	private String author;
 	private Date date;
@@ -17,18 +17,18 @@ public class Message {
 		
 	}
 	
-	public Message(int messageId, String mesg, String author) {
+	public Message(Long messageId, String mesg, String author) {
 		this.messageId = messageId;
 		this.mesg = mesg;
 		this.author = author;
 		this.date=new Date();
 	}
 
-	public int getMessageId() {
+	public Long getMessageId() {
 		return messageId;
 	}
 
-	public void setMessageId(int messageId) {
+	public void setMessageId(Long messageId) {
 		this.messageId = messageId;
 	}
 
