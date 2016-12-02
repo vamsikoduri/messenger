@@ -20,7 +20,7 @@ public class MessengerService {
 		return new ArrayList<Message>(messages.values());
 	}
 
-	public Message getMessage(int id) {
+	public Message getMessage(long id) {
 		Message message = messages.get(id);
 
 		return message;
