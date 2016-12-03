@@ -2,6 +2,7 @@ package org.learning.javabrains.messenger;
 
 import java.util.List;
 
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -10,10 +11,10 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.learning.javabrains.messenger.model.Message;
+import org.learning.javabrains.messenger.service.MessageFilterBean;
 import org.learning.javabrains.messenger.service.MessengerService;
 
 @Path("messages")
@@ -25,14 +26,13 @@ public class MessagesResources {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Message> getMessages(@QueryParam("year") int year, @QueryParam("start") int start,
-			@QueryParam("size") int size) {
+	public List<Message> getMessages(@BeanParam MessageFilterBean filter) {
 
-		if (year > 0) {
-			return service.getAllMessagesForYear(year);
+		if (filter.getYear() > 0) {
+			return service.getAllMessagesForYear(filter.getYear());
 		}
-		if (start >= 0 && size > 0) {
-			return service.getAllMessagesPaginated(start, size);
+		if (filter.getStart() >= 0 && filter.getSize() > 0) {
+			return service.getAllMessagesPaginated(filter.getStart(), filter.getSize());
 		}
 		return service.getAllMessages();
 	}
