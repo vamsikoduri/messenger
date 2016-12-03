@@ -10,6 +10,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.learning.javabrains.messenger.model.Message;
@@ -24,7 +25,15 @@ public class MessagesResources {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Message> getMessages() {
+	public List<Message> getMessages(@QueryParam("year") int year, @QueryParam("start") int start,
+			@QueryParam("size") int size) {
+
+		if (year > 0) {
+			return service.getAllMessagesForYear(year);
+		}
+		if (start >= 0 && size > 0) {
+			return service.getAllMessagesPaginated(start, size);
+		}
 		return service.getAllMessages();
 	}
 
@@ -47,15 +56,13 @@ public class MessagesResources {
 		return service.updateMessage(mesg);
 
 	}
-	
+
 	@DELETE
 	@Path("/{messageId}")
 	public Message updateMessage(@PathParam("messageId") long id) {
-		
+
 		return service.removeMessage(id);
 
 	}
-	
-	
-	
+
 }
