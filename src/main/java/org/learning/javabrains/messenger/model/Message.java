@@ -1,59 +1,84 @@
 package org.learning.javabrains.messenger.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement
 public class Message {
 
-	private Long messageId;
-	private String mesg;
-	private String author;
-	private Date date;
-
-	public Message( )
-	{
-		
+	private long id;
+    private String message;
+    private Date created;
+    private String author;
+    private Map<Long, Comment> comments = new HashMap<>();
+    private List<Link> links = new ArrayList<>();
+    
+    public Message() {
+    	
+    }
+    
+    public Message(long id, String message, String author) {
+    	this.id = id;
+    	this.message = message;
+    	this.author = author;
+    	this.created = new Date();
+    }
+    
+	public long getId() {
+		return id;
 	}
-	
-	public Message(Long messageId, String mesg, String author) {
-		this.messageId = messageId;
-		this.mesg = mesg;
-		this.author = author;
-		this.date=new Date();
+	public void setId(long id) {
+		this.id = id;
 	}
-
-	public Long getMessageId() {
-		return messageId;
+	public String getMessage() {
+		return message;
 	}
-
-	public void setMessageId(Long messageId) {
-		this.messageId = messageId;
+	public void setMessage(String message) {
+		this.message = message;
 	}
-
-	public String getMesg() {
-		return mesg;
+	public Date getCreated() {
+		return created;
 	}
-
-	public void setMesg(String mesg) {
-		this.mesg = mesg;
+	public void setCreated(Date created) {
+		this.created = created;
 	}
-
 	public String getAuthor() {
 		return author;
 	}
-
 	public void setAuthor(String author) {
 		this.author = author;
 	}
-
-	public Date getDate() {
-		return date;
+	@XmlTransient
+	public Map<Long, Comment> getComments() {
+		return comments;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setComments(Map<Long, Comment> comments) {
+		this.comments = comments;
 	}
+
+	public List<Link> getLinks() {
+		return links;
+	}
+
+	public void setLinks(List<Link> links) {
+		this.links = links;
+	}
+    
+/*	public void addLink(String url, String rel) {
+		Link link = new Link();
+		link.setLink(url);
+		link.setRel(rel);
+		links.add(link);
+	}*/
+    
+	
 
 }

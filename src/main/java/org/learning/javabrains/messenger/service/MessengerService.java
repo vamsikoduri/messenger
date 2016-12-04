@@ -33,16 +33,16 @@ public class MessengerService {
 	}
 
 	public Message addMessage(Message message) {
-		message.setMessageId((long) (messages.size() + 1));
-		messages.put(message.getMessageId(), message);
+		message.setId((long) (messages.size() + 1));
+		messages.put(message.getId(), message);
 		return message;
 	}
 
 	public Message updateMessage(Message message) {
-		if (message.getMessageId() <= 0) {
+		if (message.getId() <= 0) {
 			return null;
 		}
-		messages.put(message.getMessageId(), message);
+		messages.put(message.getId(), message);
 		return message;
 	}
 
@@ -54,7 +54,7 @@ public class MessengerService {
 		List<Message> messagesForYear = new ArrayList<>();
 		Calendar cal = Calendar.getInstance();
 		for (Message message : messages.values()) {
-			cal.setTime(message.getDate());
+			cal.setTime(message.getCreated());
 			if (cal.get(Calendar.YEAR) == year) {
 				messagesForYear.add(message);
 			}

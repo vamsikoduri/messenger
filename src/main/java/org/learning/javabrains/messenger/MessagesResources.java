@@ -1,5 +1,7 @@
 package org.learning.javabrains.messenger;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.ws.rs.BeanParam;
@@ -12,6 +14,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.learning.javabrains.messenger.model.Message;
 import org.learning.javabrains.messenger.service.MessageFilterBean;
@@ -44,15 +48,17 @@ public class MessagesResources {
 	}
 
 	@POST
-	public Message addMessage(Message mesg) {
-		return service.addMessage(mesg);
+	public Response addMessage(Message mesg) throws URISyntaxException {
+		Message newMessage = service.addMessage(mesg);
+
+		return Response.created(new URI("/messenger/webapi/messages/" + mesg.getId())).entity(newMessage).build();
 
 	}
 
 	@PUT
 	@Path("/{messageId}")
 	public Message updateMessage(@PathParam("messageId") long id, Message mesg) {
-		mesg.setMessageId(id);
+		mesg.setId(id);
 		return service.updateMessage(mesg);
 
 	}
@@ -65,7 +71,6 @@ public class MessagesResources {
 
 	}
 
-	
 	@Path("/{messageId}/comments")
 	public CommentResource getCommentReource() {
 
