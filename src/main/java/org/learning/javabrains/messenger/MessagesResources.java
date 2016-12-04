@@ -48,22 +48,25 @@ public class MessagesResources {
 
 	@GET
 	@Path("/{messageId}")
-	public Message getMessage(@PathParam("messageId") long id) {
+	public Message getMessage(@PathParam("messageId") long id, @Context UriInfo uriInfo) {
 		Message newMessage = service.getMessage(id);
 		if (null == newMessage) {
-			// throw new DataNotFoundException("Message with id :" + id + " not
-			// found");
 			ExceptionMessage msg = new ExceptionMessage();
 			msg.setCode(499);
 			msg.setMessage("message not found");
 			msg.setDocumentation("Not yet available");
-
 			Response response = Response.status(Status.NOT_FOUND).entity(msg).build();
-			// throw new WebApplicationException(response);
 			throw new NotFoundException(response);
 		}
 
+		newMessage.addLink(getUrlForSelf(id, uriInfo), "self");
 		return newMessage;
+	}
+
+	private String getUrlForSelf(long id, UriInfo uriInfo) {
+		String url = uriInfo.getBaseUriBuilder().path(MessagesResources.class).path(Long.toString(id)).build()
+				.toString();
+		return url;
 	}
 
 	@POST

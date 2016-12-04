@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -72,12 +71,12 @@ public class Message {
 		this.links = links;
 	}
     
-/*	public void addLink(String url, String rel) {
+	public void addLink(String url, String rel) {
 		Link link = new Link();
 		link.setLink(url);
 		link.setRel(rel);
 		links.add(link);
-	}*/
+	}
     
 	
 
