@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.learning.javabrains.messenger.exception.DataNotFoundException;
 import org.learning.javabrains.messenger.model.Message;
 import org.learning.javabrains.messenger.service.MessageFilterBean;
 import org.learning.javabrains.messenger.service.MessengerService;
@@ -44,7 +45,12 @@ public class MessagesResources {
 	@GET
 	@Path("/{messageId}")
 	public Message getMessage(@PathParam("messageId") long id) {
-		return service.getMessage(id);
+		Message newMessage = service.getMessage(id);
+		if (null == newMessage) {
+			throw new DataNotFoundException("Message with id :" + id + " not found");
+		}
+
+		return newMessage;
 	}
 
 	@POST
