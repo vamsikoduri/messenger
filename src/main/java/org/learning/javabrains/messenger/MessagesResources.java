@@ -12,12 +12,15 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
 
 import org.learning.javabrains.messenger.exception.DataNotFoundException;
+import org.learning.javabrains.messenger.model.ExceptionMessage;
 import org.learning.javabrains.messenger.model.Message;
 import org.learning.javabrains.messenger.service.MessageFilterBean;
 import org.learning.javabrains.messenger.service.MessengerService;
@@ -47,7 +50,15 @@ public class MessagesResources {
 	public Message getMessage(@PathParam("messageId") long id) {
 		Message newMessage = service.getMessage(id);
 		if (null == newMessage) {
-			throw new DataNotFoundException("Message with id :" + id + " not found");
+			// throw new DataNotFoundException("Message with id :" + id + " not
+			// found");
+			ExceptionMessage msg = new ExceptionMessage();
+			msg.setCode(499);
+			msg.setMessage("message not found");
+			msg.setDocumentation("Not yet available");
+
+			Response response = Response.status(Status.NOT_FOUND).entity(msg).build();
+			throw new WebApplicationException(response);
 		}
 
 		return newMessage;
