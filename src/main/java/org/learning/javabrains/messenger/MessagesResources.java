@@ -1,7 +1,6 @@
 package org.learning.javabrains.messenger;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.ws.rs.BeanParam;
@@ -13,9 +12,10 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
 import org.learning.javabrains.messenger.model.Message;
 import org.learning.javabrains.messenger.service.MessageFilterBean;
@@ -48,10 +48,12 @@ public class MessagesResources {
 	}
 
 	@POST
-	public Response addMessage(Message mesg) throws URISyntaxException {
+	public Response addMessage(@Context UriInfo uriInfo, Message mesg) {
 		Message newMessage = service.addMessage(mesg);
-
-		return Response.created(new URI("/messenger/webapi/messages/" + mesg.getId())).entity(newMessage).build();
+		String messgId = String.valueOf(mesg.getId());
+		URI uri = uriInfo.getAbsolutePathBuilder().path(messgId).build();
+		// return Response.status(Status.CREATED).entity(newMessage).build();
+		return Response.created(uri).entity(newMessage).build();
 
 	}
 
