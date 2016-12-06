@@ -13,14 +13,12 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
-import org.learning.javabrains.messenger.exception.DataNotFoundException;
 import org.learning.javabrains.messenger.model.ExceptionMessage;
 import org.learning.javabrains.messenger.model.Message;
 import org.learning.javabrains.messenger.service.MessageFilterBean;
@@ -59,13 +57,28 @@ public class MessagesResources {
 			throw new NotFoundException(response);
 		}
 
-		newMessage.addLink(getUrlForSelf(id, uriInfo), "self");
+		newMessage.addLink(getUrlForSelf(uriInfo, newMessage), "self");
+		newMessage.addLink(getUrlForProfile(uriInfo, newMessage), "profile");
+		newMessage.addLink(getUrlForComment(uriInfo, newMessage), "messages");
 		return newMessage;
 	}
 
-	private String getUrlForSelf(long id, UriInfo uriInfo) {
-		String url = uriInfo.getBaseUriBuilder().path(MessagesResources.class).path(Long.toString(id)).build()
+	private String getUrlForComment(UriInfo uriInfo, Message newMessage) {
+		String url = uriInfo.getBaseUriBuilder().path(MessagesResources.class)
+				.path(MessagesResources.class, "getCommentReource").path(CommentResource.class)
+				.resolveTemplate("messageId", newMessage.getId()).toString();
+		return url;
+	}
+
+	private String getUrlForProfile(UriInfo uriInfo, Message newMessage) {
+		String url = uriInfo.getBaseUriBuilder().path(ProfileResource.class).path(newMessage.getAuthor()).build()
 				.toString();
+		return url;
+	}
+
+	private String getUrlForSelf(UriInfo uriInfo, Message newMessage) {
+		String url = uriInfo.getBaseUriBuilder().path(MessagesResources.class).path(Long.toString(newMessage.getId()))
+				.build().toString();
 		return url;
 	}
 
